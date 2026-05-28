@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* 1. UNIVERSAL RESET (Fixes the weird margin lines!) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased; /* Makes text sharper */
+}
+
+/* Container */
+.app-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Modern Cards */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: left; /* Fixes alignment */
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.btn-primary { background: #6366f1; color: white; }
+.btn-primary:hover { background: #4f46e5; }
+.btn-success { background: #10b981; color: white; }
+.btn-success:hover { background: #059669; }
+.btn-danger { background: #ef4444; color: white; }
+.btn-danger:hover { background: #dc2626; }
+.btn-outline { background: white; border: 2px solid #cbd5e1; color: #334155; }
+.btn-outline:hover { background: #f1f5f9; border-color: #94a3b8; }
+
+.btn-tab { 
+  background: transparent; 
+  color: #475569; /* Darkened for visibility */
+  border-bottom: 3px solid transparent; 
+  border-radius: 0; 
+  padding: 12px 20px; 
+  font-weight: 600; 
+}
+.btn-tab.active { color: #6366f1; border-bottom-color: #6366f1; }
+
+/* Input Fields */
+/* Input Fields */
+.input-field {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: #ffffff; /* <-- ADD THIS LINE */
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 15px;
+  color: #1e293b; /* Ensures text is dark */
+}
+.input-field:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* Navigation Header */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.top-nav h1 { font-size: 1.5rem; color: #1e293b; }
+
+/* List Items */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #f8fafc;
+  margin-bottom: 12px;
+  border: 1px solid #f1f5f9;
+  text-align: left; /* Fixes text alignment */
+}
+.statement-bill { border-left: 5px solid #f59e0b; }
+.statement-payment { border-left: 5px solid #10b981; background: #ecfdf5; }
+
+/* Badges */
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.badge-credit { background: #d1fae5; color: #065f46; }
+
+/* Layout Utilities */
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* ========================================= */
+/* MOBILE RESPONSIVENESS (The Magic Sauce)   */
+/* ========================================= */
+/* ========================================= */
+/* ADVANCED RESPONSIVENESS (Tablets & Phones)*/
+/* ========================================= */
+
+/* TABLETS & SMALL LAPTOPS (Under 768px) */
+@media screen and (max-width: 768px) {
+  .app-container {
+    padding: 15px;
+  }
+  
+  /* Make the top navigation buttons wrap neatly */
+  .top-nav {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  /* Give the navigation buttons full width on tablets */
+  .top-nav div {
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+  }
+  
+  .top-nav div button {
+    flex: 1;
+  }
+}
+
+/* MOBILE PHONES (Under 600px) */
+@media screen and (max-width: 600px) {
+  /* Force the 2-column grid to become 1 single column */
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Make list items stack vertically so text doesn't overlap */
+  .list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  /* Force buttons inside lists (like "Settle Up") to stretch full width */
+  .list-item button {
+    width: 100%;
+    margin-top: 5px;
+    padding: 14px; /* Make it taller for easy thumb-tapping */
+  }
+
+  /* Adjust text sizes for smaller screens */
+  .top-nav h1 {
+    font-size: 1.3rem;
+  }
+  
+  .card {
+    padding: 20px 15px;
+  }
+}
