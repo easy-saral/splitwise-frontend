@@ -78,3 +78,25 @@ Vercel will auto-detect that it is a Vite/React app. You don't need to change an
 Click Deploy.
 
 Vercel will build your app in about 30 seconds, do a little confetti animation, and give you a beautiful live .vercel.app domain.
+
+
+
+
+
+
+
+
+The Complete Cycle (The "Talking" Process)
+Here is exactly what happens in a split-second when you click "Settle Up":
+
+(React) You click the button. React uses Axios to shout over the internet: "Hey Render Backend! Please run the POST /api/expenses route with this data!"
+
+(Express) Your Render backend hears the shout, catches the data, and says: "Okay, let me tell MongoDB to save this payment."
+
+(MongoDB) Atlas saves the data permanently and replies to the backend: "Saved successfully!"
+
+(Express) The backend turns back to the frontend and replies: "Success! Here is the updated list of settlements."
+
+(React) The frontend receives the new list, updates the screen instantly, and shows the user: "🎉 Everyone is settled up!"
+
+You are no longer just writing code—you are architecting systems that communicate across the globe. Welcome to Full-Stack Engineering!
