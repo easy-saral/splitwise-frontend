@@ -241,37 +241,52 @@ function App() {
 
   // --- GROUP VIEW ---
   if (view === 'group') {
-    const handleAddExpense = async (e) => {
+   const handleAddExpense = async (e) => {
       e.preventDefault();
-      const descInput = e.target.desc.value;
-      const amountInput = parseFloat(e.target.amount.value);
-      const payerId = e.target.payer.value;
-      const payerName = groupData.members.find(m => m._id === payerId)?.name;
+      
+      try {
+        const descInput = e.target.desc.value;
+        const amountInput = parseFloat(e.target.amount.value);
+        const payerId = e.target.payer.value;
+        
+        // Safety check to ensure we have a valid payer
+        const payerMember = groupData.members.find(m => m._id === payerId);
+        const payerName = payerMember ? payerMember.name : "Someone";
 
-      const split = amountInput / groupData.members.length;
-      const splitDetails = groupData.members.map(m => ({ user: m._id, amountOwed: split }));
-      
-      await axios.post(`${API}/expenses`, { 
-        groupId: activeGroup._id, 
-        description: descInput, 
-        totalAmount: amountInput, 
-        payer: payerId, 
-        splitDetails 
-      });
-      
-      const res = await axios.get(`${API}/groups/${activeGroup._id}/settlements`);
-      setGroupData({ ...groupData, expenses: res.data.expenses, settlements: res.data.settlements });
-      e.target.reset();
+        // Prevent dividing by zero if the group is empty
+        if (groupData.members.length === 0) {
+          alert("Cannot add an expense to a group with no members!");
+          return;
+        }
 
-      // --- NEW WHATSAPP FEATURE ---
-      const message = `💸 *New SplitShare Bill Added!*\n\n*${payerName}* just paid *$${amountInput}* for _${descInput}_ in the *${activeGroup.name}* group.\n\nCheck the app to see your updated balances!`;
-      
-      // We use encodeURIComponent to safely turn spaces and symbols into a web link
-      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-      
-      // Ask the user if they want to share it, and open WhatsApp if they say yes
-      if (window.confirm("Expense added! Do you want to share this to WhatsApp?")) {
-        window.open(whatsappUrl, '_blank');
+        const split = amountInput / groupData.members.length;
+        const splitDetails = groupData.members.map(m => ({ user: m._id, amountOwed: split }));
+        
+        // 1. Send data to backend
+        await axios.post(`${API}/expenses`, { 
+          groupId: activeGroup._id, 
+          description: descInput, 
+          totalAmount: amountInput, 
+          payer: payerId, 
+          splitDetails 
+        });
+        
+        // 2. Refresh the UI data
+        const res = await axios.get(`${API}/groups/${activeGroup._id}/settlements`);
+        setGroupData({ ...groupData, expenses: res.data.expenses, settlements: res.data.settlements });
+        e.target.reset();
+
+        // 3. WhatsApp Feature
+        const message = `💸 *New SplitShare Bill Added!*\n\n*${payerName}* just paid *$${amountInput}* for _${descInput}_ in the *${activeGroup.name}* group.\n\nCheck the app to see your updated balances!`;
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        
+        if (window.confirm("Expense added! Do you want to share this to WhatsApp?")) {
+          window.open(whatsappUrl, '_blank');
+        }
+
+      } catch (err) {
+        console.error("Error adding expense:", err);
+        alert("Failed to add expense. Check the console for details.");
       }
     };
     // const handleAddExpense = async (e) => {
