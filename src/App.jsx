@@ -243,10 +243,43 @@ function App() {
   if (view === 'group') {
     const handleAddExpense = async (e) => {
       e.preventDefault();
-      const amount = parseFloat(e.target.amount.value);
-      const split = amount / groupData.members.length;
+      const descInput = e.target.desc.value;
+      const amountInput = parseFloat(e.target.amount.value);
+      const payerId = e.target.payer.value;
+      const payerName = groupData.members.find(m => m._id === payerId)?.name;
+
+      const split = amountInput / groupData.members.length;
       const splitDetails = groupData.members.map(m => ({ user: m._id, amountOwed: split }));
-      await axios.post(`${API}/expenses`, { groupId: activeGroup._id, description: e.target.desc.value, totalAmount: amount, payer: e.target.payer.value, splitDetails });
+      
+      await axios.post(`${API}/expenses`, { 
+        groupId: activeGroup._id, 
+        description: descInput, 
+        totalAmount: amountInput, 
+        payer: payerId, 
+        splitDetails 
+      });
+      
+      const res = await axios.get(`${API}/groups/${activeGroup._id}/settlements`);
+      setGroupData({ ...groupData, expenses: res.data.expenses, settlements: res.data.settlements });
+      e.target.reset();
+
+      // --- NEW WHATSAPP FEATURE ---
+      const message = `💸 *New SplitShare Bill Added!*\n\n*${payerName}* just paid *$${amountInput}* for _${descInput}_ in the *${activeGroup.name}* group.\n\nCheck the app to see your updated balances!`;
+      
+      // We use encodeURIComponent to safely turn spaces and symbols into a web link
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      
+      // Ask the user if they want to share it, and open WhatsApp if they say yes
+      if (window.confirm("Expense added! Do you want to share this to WhatsApp?")) {
+        window.open(whatsappUrl, '_blank');
+      }
+    };
+    // const handleAddExpense = async (e) => {
+    //   e.preventDefault();
+    //   const amount = parseFloat(e.target.amount.value);
+    //   const split = amount / groupData.members.length;
+    //   const splitDetails = groupData.members.map(m => ({ user: m._id, amountOwed: split }));
+    //   await axios.post(`${API}/expenses`, { groupId: activeGroup._id, description: e.target.desc.value, totalAmount: amount, payer: e.target.payer.value, splitDetails });
       const res = await axios.get(`${API}/groups/${activeGroup._id}/settlements`);
       setGroupData({ ...groupData, expenses: res.data.expenses, settlements: res.data.settlements });
       e.target.reset();
