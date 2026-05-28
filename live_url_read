@@ -1,0 +1,80 @@
+https://splitwise-frontend-eta.vercel.app/
+
+admin/adminpassword
+familypassword
+
+
+Phase 1: Push Your Code to GitHub
+Both Render and Vercel work by connecting to your GitHub account. Every time you push an update to GitHub, they will automatically update your live website!
+
+Go to GitHub.com and create two new repositories:
+
+Name one splitwise-backend
+
+Name the other splitwise-frontend
+
+Open your terminal, navigate to your backend folder (debt-simplifier), and push your code to the backend repo.
+
+Open a second terminal, navigate to your frontend folder, and push your React code to the frontend repo.
+(If you need help with the Git commands to do this, let me know!)
+
+
+Phase 2: Deploy the Backend (Render)
+You must deploy the backend first, because your frontend needs to know its new live URL.
+
+Go to Render.com and sign up with your GitHub account.
+
+Click New + and select Web Service.
+
+Connect your splitwise-backend repository.
+
+Fill in the details:
+
+Name: splitwise-api
+
+Environment: Node
+
+Build Command: npm install
+
+Start Command: node server.js
+
+Instance Type: Free
+
+CRITICAL STEP: Scroll down to Environment Variables. Add a variable named MONGO_URI and paste your exact MongoDB Atlas connection string as the value.
+
+Click Create Web Service.
+
+Wait a few minutes. Render will give you a live URL that looks something like https://splitwise-api-xyz.onrender.com. Copy this URL!
+
+
+
+
+Phase 3: Connect Frontend to the Live Backend
+Right now, your React app is hardcoded to look for http://localhost:3000. If you deploy it like this, it will break!
+
+Open your code editor and go to frontend/src/App.jsx.
+
+Near the top (around line 5), find this line:
+
+JavaScript
+const API = 'http://localhost:3000/api';
+Change it to your new Render URL:
+
+JavaScript
+const API = 'https://splitwise-api-xyz.onrender.com/api'; // Use YOUR exact Render link!
+Save the file, and push this update to your splitwise-frontend GitHub repository.
+
+Phase 4: Deploy the Frontend (Vercel)
+This is the easiest part. Vercel is absolute magic.
+
+Go to Vercel.com and log in with GitHub.
+
+Click Add New -> Project.
+
+You will see a list of your GitHub repos. Click Import next to your splitwise-frontend repository.
+
+Vercel will auto-detect that it is a Vite/React app. You don't need to change any settings!
+
+Click Deploy.
+
+Vercel will build your app in about 30 seconds, do a little confetti animation, and give you a beautiful live .vercel.app domain.
