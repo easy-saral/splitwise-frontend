@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API = 'https://splitwise-backend-6d4z.onrender.com';
+const API = 'https://splitwise-backend-6d4z.onrender.com/api';
 
 function App() {
   const [role, setRole] = useState(null); 
