@@ -295,10 +295,10 @@ function App() {
     //   const split = amount / groupData.members.length;
     //   const splitDetails = groupData.members.map(m => ({ user: m._id, amountOwed: split }));
     //   await axios.post(`${API}/expenses`, { groupId: activeGroup._id, description: e.target.desc.value, totalAmount: amount, payer: e.target.payer.value, splitDetails });
-      const res = await axios.get(`${API}/groups/${activeGroup._id}/settlements`);
-      setGroupData({ ...groupData, expenses: res.data.expenses, settlements: res.data.settlements });
-      e.target.reset();
-    };
+      // const res = await axios.get(`${API}/groups/${activeGroup._id}/settlements`);
+      // setGroupData({ ...groupData, expenses: res.data.expenses, settlements: res.data.settlements });
+      // e.target.reset();
+    // };
 
     const handleQuickSettle = async (fromName, toName, amount) => {
       const fromUser = groupData.members.find(m => m.name === fromName);
